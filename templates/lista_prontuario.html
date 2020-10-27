@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Prontuários</title>
+    </head>
+    <body>
+        <h1>Prontuário:</h1>
+        <table border="1">
+            <tr>
+                <!-- <td>ID</td> -->
+                <td>Paciente</td>
+                <td>Psicologo</td>
+                <td>Diagnostico</td>
+                <td>Inicio do Tratamento</td>
+                <td>Fim do Tratamento</td>
+                <td>&nbsp;</td>
+            </tr>
+            {% for prontuario in prontuarios %}
+                <tr>
+                    <!-- <td>{{prontuario['id_prontuario']}}</td> -->
+                    <td>{{prontuario['nome_paciente']}}</td>
+                    <td>{{prontuario['nome_psicologo']}}</td>
+                    <td>{{prontuario['diagnostico']}}</td>
+                    <td>{{prontuario['data_inicio_tratamento']}}</td>
+                    <td>{{prontuario['data_final_tratamento']}}</td>
+                    <div class="button">
+                        <td><a href="/prontuario/{{prontuario['id_prontuario']}}"><button type="button">Editar</button></a></td>
+                    </div>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="button">
+            <p>
+                <a href="/menu"><button type="button">Voltar</button></a>
+            </p>
+        </div>
+    </body>
+</html>

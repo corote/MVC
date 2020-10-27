@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastrar Consulta</title>
+        <style>
+            form {
+                /* Apenas para centralizar o form na página */
+                margin: 0 auto;
+                width: 400px;
+                /* Para ver as bordas do formulário */
+                padding: 1em;
+                border: 1px solid #CCC;
+                border-radius: 1em;
+            }
+            form div + div {
+                margin-top: 1em;
+            }
+            label {
+                /*Para ter certeza que todas as labels tem o mesmo tamanho e estão propriamente alinhadas */
+                display: inline-block;
+                width: 90px;
+                text-align: right;
+            }
+            input, textarea {
+                /* Para certificar-se que todos os campos de texto têm as mesmas configurações de fonte. Por padrão, textareas ter uma fonte monospace*/
+                font: 1em sans-serif;
+
+                /* Para dar o mesmo tamanho a todos os campo de texto */
+                width: 300px;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+
+                /* Para harmonizar o look & feel das bordas nos campos de texto*/
+                border: 1px solid #999;
+            }
+            input:focus, textarea:focus {
+                /* Dar um pouco de destaque nos elementos ativos */
+                border-color: #000;
+            }
+            .button {
+                /* Para posicionar os botões para a mesma posição dos campos de texto */
+                padding-left: 90px; /* mesmo tamanho que os elementos do tipo label */
+            }
+            button {
+                /* Esta margem extra representa aproximadamente o mesmo espaço que o espaço entre as labels e os seus campos de texto*/
+                margin-left: .5em;
+            }
+        </style>
+        <script type="text/javascript">
+            const id_consulta = "{{id_consulta}}";
+
+            function validar() {
+                const nome_paciente = document.getElementById('nome_paciente');
+                const dataa = document.getElementById('dataa');
+                const hora = document.getElementById('hora');
+                const endereco = document.getElementById('endereco');
+                const nome_psicologo = document.getElementById('nome_psicologo');
+                if (nome_paciente.value == "escolha" || nome_psicologo.value == "escolha" ) {
+                    alert("Escolha o Paciente e o Psicologo.");
+                    return false;
+                }
+                if (dataa.value === '' || hora.value === '') {
+                    alert("Preencha o Data e Hora");
+                    return false;
+                }
+                if (endereco.value === '') {
+                    alert("Preencha o Endereço");
+                    return false;
+                }
+                return true;
+            }
+
+            function salvar() {
+                if (!validar()) return;
+                document.getElementById("form_principal").submit();
+            }
+
+            function excluir() {
+                if (!confirm("Você tem certeza?")) return;
+                xhr = new XMLHttpRequest();
+                xhr.open('DELETE', '/consulta/' + id_consulta);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                    if (xhr.readyState !== 4) return;
+                    if (xhr.status === 200) {
+                        document.open();
+                        document.write(xhr.responseText);
+                        document.close();
+                    } else {
+                        alert('Erro ' + xhr.status);
+                    }
+                };
+                xhr.send();
+            }
+        </script>
+    </head>
+    <body>
+        <form action="/consulta/{{id_consulta}}" method="POST" id="form_principal">
+            {% if id_consulta != 'novo'%}
+                <p>
+                    <label>Id:</label>
+                    {{id_consulta}}
+                </p>
+            {% endif %}
+            <p>
+                <label for="nome_paciente">Paciente:</label>
+                <select name="id_paciente" id="nome_paciente">
+                    <option value="escolha">Escolha...</option>
+                    {% for paciente in pacientes %}
+                        <option value="{{paciente['id_paciente']}}" {% if id_paciente == paciente['id_paciente'] %}selected="selected"{% endif %}>{{paciente['nome_paciente']}}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <p>
+                <label for="dataa">Data:</label>
+                <input type="date" id="dataa" name="dataa" autocomplete="off" value="{{dataa}}" />
+            </p>
+            <p>
+                <label for="hora">Hora:</label>
+                <input type="time" id="hora" name="hora" autocomplete="off" value="{{hora}}" />
+            </p>
+            <p>
+                <label for="endereco">Endereço:</label>
+                <input type="text" id="endereco" name="endereco" autocomplete="off" value="{{endereco}}" />
+            </p>
+            <p>
+                <label for="nome_psicologo">Psicologo:</label>
+                <select name="id_psicologo" id="nome_psicologo">
+                    <option value="escolha">Escolha...</option>
+                    {% for psicologo in psicologos %}
+                        <option value="{{psicologo['id_psicologo']}}" {% if id_psicologo == psicologo['id_psicologo'] %}selected="selected"{% endif %}>{{psicologo['nome_psicologo']}}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <p>
+                <button type="button" onclick="javascript:salvar();">Salvar</button>
+                {% if id_consulta != 'novo' %}<button type="button" onclick="javascript:excluir();">Excluir</button>{% endif %}
+            </p>
+        </form>
+        <div class="button">  
+            <p>
+                <a href="/menu"><button type="button">Voltar</button></a>
+            </p>
+        </div>
+        {% if id_consulta != 'novo' %}<form action="/consulta/{{id_consulta}}" id="delt" method="DELETE" style="display: none"></form>{% endif %}
+    </body>
+</html>

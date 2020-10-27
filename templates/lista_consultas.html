@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Consultas</title>
+    </head>
+    <body>
+        <h1>Consulta:</h1>
+        <table border="1">
+            <tr>
+                <!-- <td>ID</td> -->
+                <td>Paciente</td>               
+                <td>Data</td>
+                <td>Hora</td>
+                <td>Endereço</td>
+                <td>Psicologo</td>
+                <td>&nbsp;</td>
+            </tr>
+            {% for consulta in consultas %}
+                <tr>
+                    <!-- <td>{{consulta['id_consulta']}}</td> -->
+                    <td>{{consulta['nome_paciente']}}</td>
+                    <td>{{consulta['dataa']}}</td>
+                    <td>{{consulta['hora']}}</td>
+                    <td>{{consulta['endereco']}}</td>
+                    <td>{{consulta['nome_psicologo']}}</td>
+                    <div class="button">
+                        <td>
+                            <a href="/consulta/{{consulta['id_consulta']}}"><button type="button">Editar</button></a>
+                        </td>
+                    </div>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="button">
+            <p>
+                <a href="/menu"><button type="button">Voltar</button></a>
+            </p>
+        </div>
+    </body>
+</html>

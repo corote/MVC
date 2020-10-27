@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastrar Prontuário</title>
+        <style>
+            form {
+                /* Apenas para centralizar o form na página */
+                margin: 0 auto;
+                width: 400px;
+                /* Para ver as bordas do formulário */
+                padding: 1em;
+                border: 1px solid #CCC;
+                border-radius: 1em;
+            }
+            form div + div {
+                margin-top: 1em;
+            }
+            label {
+                /*Para ter certeza que todas as labels tem o mesmo tamanho e estão propriamente alinhadas */
+                display: inline-block;
+                width: 90px;
+                text-align: right;
+            }
+            input, textarea {
+                /* Para certificar-se que todos os campos de texto têm as mesmas configurações de fonte. Por padrão, textareas ter uma fonte monospace*/
+                font: 1em sans-serif;
+
+                /* Para dar o mesmo tamanho a todos os campo de texto */
+                width: 300px;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+
+                /* Para harmonizar o look & feel das bordas nos campos de texto*/
+                border: 1px solid #999;
+            }
+            input:focus, textarea:focus {
+                /* Dar um pouco de destaque nos elementos ativos */
+                border-color: #000;
+            }
+            .button {
+                /* Para posicionar os botões para a mesma posição dos campos de texto */
+                padding-left: 90px; /* mesmo tamanho que os elementos do tipo label */
+            }
+            button {
+                /* Esta margem extra representa aproximadamente o mesmo espaço que o espaço entre as labels e os seus campos de texto*/
+                margin-left: .5em;
+            }
+        </style>
+        <script type="text/javascript">
+            const id_prontuario = "{{id_prontuario}}";
+
+            function validar() {
+                const nome_paciente = document.getElementById('nome_paciente');
+                const nome_psicologo = document.getElementById('nome_psicologo');
+                const diagnostico = document.getElementById('diagnostico');
+                const data_inicio_tratamento = document.getElementById('data_inicio_tratamento');
+                const data_final_tratamento= document.getElementById('data_final_tratamento');
+                if (data_final_tratamento.value === '' || data_inicio_tratamento.value === '') {
+                    alert("Preencha as Datas.");
+                    return false;
+                }
+                if (nome_paciente.value == "escolha") {
+                    alert("Escolha o Paciente");
+                    return false;
+                }
+                if (nome_psicologo.value == "escolha") {
+                    alert("Escolha o Psicólogo");
+                    return false;
+                }
+                if (diagnostico.value === '') {
+                    alert("Preencha o Diagnóstico");
+                    return false;
+                }
+                return true;
+            }
+
+            function salvar() {
+                if (!validar()) return;
+                document.getElementById("form_principal").submit();
+            }
+
+            function excluir() {
+                if (!confirm("Você tem certeza?")) return;
+                xhr = new XMLHttpRequest();
+                xhr.open('DELETE', '/prontuario/' + id_prontuario);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                    if (xhr.readyState !== 4) return;
+                    if (xhr.status === 200) {
+                        document.open();
+                        document.write(xhr.responseText);
+                        document.close();
+                    } else {
+                        alert('Erro ' + xhr.status);
+                    }
+                };
+                xhr.send();
+            }
+        </script>
+    </head>
+    <body>
+        <form action="/prontuario/{{id_prontuario}}" method="POST" id="form_principal">
+            {% if id_prontuario != 'novo'%}
+                <p>
+                    <label>Id:</label>
+                    {{id_prontuario}}
+                </p>
+            {% endif %}
+            <p>
+                <label for="paciente">Paciente:</label>
+                <select name="nome_paciente" id="paciente">
+                    <option value="escolha">Escolha...</option>
+                    {% for prontuario in pacientes %}
+                        <option value="{{prontuario['id_paciente']}}" {% if id_paciente == pacientes['nome_paciente'] %}selected="selected"{% endif %}>{{prontuario['nome_paciente']}}</option>
+                    {% endfor %}
+                </select>
+            </p>
+            <p>
+                <label for="psicologo">Psicologo:</label>
+                <select name="nome_psicologo" id="psicologo">
+                    <option value="escolha">Escolha...</option>
+                    {% for prontuario in psicologos %}
+                        <option value="{{prontuario['id_psicologo']}}" {% if id_psicologo == psicologos['nome_psicologo'] %}selected="selected"{% endif %}>{{prontuario['nome_psicologo']}}</option>
+                    {% endfor %}
+                </select>
+            </p>            
+            <p>
+                <label for="diagnostico">Diagnóstico:</label>
+                <input type="text" id="diagnostico" name="diagnostico" autocomplete="off" value="{{diagnostico}}" />
+            </p>
+            <p>
+                <label for="data_inicio_tratamento">Inicio do Tratamento:</label>
+                <input type="date" id="data_inicio_tratamento" name="data_inicio_tratamento" autocomplete="off" value="{{data_inicio_tratamento}}" />
+            </p>
+            <p>
+                <label for="data_final_tratamento">Fim do Tratamento:</label>
+                <input type="date" id="data_final_tratamento" name="data_final_tratamento" autocomplete="off" value="{{data_final_tratamento}}" />
+            </p>
+            <p>
+                <button type="button" onclick="javascript:salvar();">Salvar</button>
+                {% if id_prontuario != 'novo' %}<button type="button" onclick="javascript:excluir();">Excluir</button>{% endif %}
+            </p>
+        </form>
+        <div class="button">
+            <p>
+                <a href="/menu"><button type="button">Voltar</button></a>
+            </p>
+        </div>
+        {% if id_prontuario != 'novo' %}<form action="/prontuario/{{id_prontuario}}" id="delt" method="DELETE" style="display: none"></form>{% endif %}
+    </body>
+</html>

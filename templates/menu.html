@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Menu</title>
+    </head>
+    <body>
+        {% if mensagem != '' %}
+            <h2>{{mensagem}}</h2>
+        {% endif %}
+        <ol><h3>Escolha a opção que você quer:</h3>
+            <li>Psicologo
+                <ul>
+                    <li><p><a href="/psicologo">Listar Psicólogos</a></p>
+                    <li><p><a href="/psicologo/novo">Cadastrar Psicólogo</a></p>
+                </ul>
+            </li>
+            <li>Paciente
+                <ul>
+                    <li><p><a href="/paciente">Listar Pacientes</a></p>
+                    <li><p><a href="/paciente/novo">Cadastrar Paciente</a></p>
+                </ul>
+            </li>
+            <li>Consulta
+                <ul>
+                    <li><p><a href="/consulta">Listar Consultas</a></p>
+                    <li><p><a href="/consulta/novo">Cadastrar Consulta</a></p>
+                </ul>
+            <li>Prontuario
+                <ul>
+                    <li><p><a href="/prontuario">Listar Prontuario</a></p>
+                    <li><p><a href="/prontuario/novo">Cadastrar Prontuario</a></p>
+                </ul>
+            </li>
+            <li>Anotações
+                <ul>
+                    <li><p><a href="/anotacoes">Listar Anotações</a></p>
+                    <li><p><a href="/anotacoes/novo">Cadastrar Anotações</a></p>
+                </ul>
+            </li>
+            <li>Chat
+                <ul>
+                    <li><p><a href="/chat">Chat</a></p>
+                </ul>
+            </li>
+        </ol>
+    </body>
+</html>

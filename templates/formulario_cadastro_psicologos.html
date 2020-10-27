@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastrar Psicólogo</title>
+        <style>
+            form {
+                /* Apenas para centralizar o form na página */
+                margin: 0 auto;
+                width: 400px;
+                /* Para ver as bordas do formulário */
+                padding: 1em;
+                border: 1px solid #CCC;
+                border-radius: 1em;
+            }
+            form div + div {
+                margin-top: 1em;
+            }
+            label {
+                /*Para ter certeza que todas as labels tem o mesmo tamanho e estão propriamente alinhadas */
+                display: inline-block;
+                width: 90px;
+                text-align: right;
+            }
+            input, textarea {
+                /* Para certificar-se que todos os campos de texto têm as mesmas configurações de fonte. Por padrão, textareas ter uma fonte monospace*/
+                font: 1em sans-serif;
+
+                /* Para dar o mesmo tamanho a todos os campo de texto */
+                width: 300px;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+
+                /* Para harmonizar o look & feel das bordas nos campos de texto*/
+                border: 1px solid #999;
+            }
+            input:focus, textarea:focus {
+                /* Dar um pouco de destaque nos elementos ativos */
+                border-color: #000;
+            }
+            .button {
+                /* Para posicionar os botões para a mesma posição dos campos de texto */
+                padding-left: 90px; /* mesmo tamanho que os elementos do tipo label */
+            }
+            button {
+                /* Esta margem extra representa aproximadamente o mesmo espaço que o espaço entre as labels e os seus campos de texto*/
+                margin-left: .5em;
+            }
+        </style>
+        <script type="text/javascript">
+            const id_psicologo = "{{id_psicologo}}";
+
+            function validar() {
+                const nome_psicologo = document.getElementById('nome_psicologo');
+                const nome_social_psicologo = document.getElementById('nome_social_psicologo');
+                const rg_psicologo = document.getElementById('rg_psicologo');
+                const cpf_psicologo = document.getElementById('cpf_psicologo');
+                const crp = document.getElementById('crp');
+                const sexo_masc = document.getElementById('sexo_masc');
+                const sexo_fem = document.getElementById('sexo_fem');
+                const email = document.getElementById('email');
+                const data_nascimento_psicologo = document.getElementById('data_nascimento_psicologo');
+                const data_validade_crp = document.getElementById('data_validade_crp');                
+                const autonomo_sim = document.getElementById('autonomo_sim');
+                const autonomo_nao = document.getElementById('autonomo_nao');
+                const cnpj = document.getElementById('cnpj');
+                const usuario = document.getElementById('usuario');
+                if (nome_psicologo.value === '' || nome_social_psicologo === '') {
+                    alert("Preencha o Nome.");
+                    return false;
+                }
+                if (rg_psicologo.value === '') {
+                    alert("Preencha o Rg");
+                    return false;
+                }
+                if (cpf_psicologo.value === '') {
+                    alert("Preencha o Cpf");
+                    return false;
+                }
+                if (crp.value === '') {
+                    alert("Preencha o crp");
+                    return false;
+                }            
+                if (!sexo_masc.checked && !sexo_fem.checked) {
+                    alert("Escolha o sexo.");
+                    return false;
+                }
+                if (email.value === '') {
+                    alert("Preencha o E-mail");
+                    return false;
+                }
+                if (data_nascimento_psicologo.value === '' || data_validade_crp === '') {
+                    alert("Preencha as Datas");
+                    return false;
+                }
+                if (!autonomo_sim.checked && !autonomo_nao.checked) {
+                    alert("Escolha Sim ou Não.");
+                    return false;
+                }
+                
+                if (cnpj.value === '') {
+                    alert("Preencha o Rg");
+                    return false;
+                }
+                if (usuario.value == "") {
+                    alert("Digite o usuário.");
+                    return false;
+                }
+                return true;
+            }
+
+            function salvar() {
+                if (!validar()) return;
+                document.getElementById("form_principal").submit();
+            }
+
+            function excluir() {
+                if (!confirm("Você tem certeza?")) return;
+                xhr = new XMLHttpRequest();
+                xhr.open('DELETE', '/psicologo/' + id_psicologo);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                    if (xhr.readyState !== 4) return;
+                    if (xhr.status === 200) {
+                        document.open();
+                        document.write(xhr.responseText);
+                        document.close();
+                    } else {
+                        alert('Erro ' + xhr.status);
+                    }
+                };
+                xhr.send();
+            }
+        </script>
+    </head>
+    <body>
+        <form action="/psicologo/{{id_psicologo}}" method="POST" id="form_principal">
+            {% if id_psicologo != 'novo'%}
+                <div>
+                    <p>
+                        <label>Id:</label>
+                        {{id_psicologo}}
+                    </p>
+                </div>
+            {% endif %}
+            <div>
+                <p>
+                    <label for="nome_psicologo">Nome Completo:</label>
+                    <input type="text" id="nome_psicologo" name="nome_psicologo" autocomplete="off" value="{{nome_psicologo}}" />
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label for="nome_social">Nome Social:</label>
+                    <input type="text" id="nome_social_psicologo" name="nome_social_psicologo" autocomplete="off" value="{{nome_social_psicologo}}" />
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label for="rg_psicologo">RG:</label>
+                    <input type="text" id="rg_psicologo" name="rg_psicologo" autocomplete="off" value="{{rg_psicologo}}" />
+                </p>
+            </div>
+            <div>            
+                <p>
+                    <label for="cpf_psicologo">CPF:</label>
+                    <input type="text" id="cpf_psicologo" name="cpf_psicologo" autocomplete="off" value="{{cpf_psicologo}}" />
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label for="crp">CRP:</label>
+                    <input type="text" id="crp" name="crp" autocomplete="off" value="{{crp}}" />
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>Sexo:</label>
+                    <input type="radio" id="sexo_masc" name="sexo" value="M" {% if sexo == 'M' %}checked="checked"{% endif %}>Masculino</input>
+                    <input type="radio" id="sexo_fem" name="sexo" value="F" {% if sexo == 'F' %}checked="checked"{% endif %}>Feminino</input>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label for="email">E-mail:</label>
+                    <input type="text" id="email" name="email" autocomplete="off" value="{{email}}" />
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label for="data_nascimento_psicologo">Data do Nascimento:</label>
+                    <input type="date" id="data_nascimento_psicologo" name="data_nascimento_psicologo" autocomplete="off" value="{{data_nascimento_psicologo}}" />
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label for="data_validade_crp">Data do Vencimento da CRP:</label>
+                    <input type="date" id="data_validade_crp" name="data_validade_crp" autocomplete="off" value="{{data_validade_crp}}" />
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label>Autonomo:</label>
+                    <input type="radio" id="autonomo_sim" name="autonomo" value="S" {% if sexo == 'S' %}checked="checked"{% endif %}>Sim</input>
+                    <input type="radio" id="autonomo_nao" name="autonomo" value="N" {% if sexo == 'N' %}checked="checked"{% endif %}>Não</input>
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label for="cnpj">CNPJ:</label>
+                    <input type="text" id="cnpj" name="cnpj" autocomplete="off" value="{{cnpj}}" />
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label for="usuario">Usuário:</label>
+                    <input type="text" id="usuario" name="usuario" autocomplete="off" value="{{usuario}}" />
+                </p>
+            </div>
+            <div>
+                <p>
+                    <label for="senha">Senha:</label>
+                    <input type="password" id="senha" name="senha" autocomplete="off" value="{{senha}}" />
+                </p>
+            </div>
+            <div class="button">
+                <p>
+                    <button type="button" onclick="javascript:salvar();">Salvar</button>
+                    {% if id_psicologo != 'novo' %}<button type="button" onclick="javascript:excluir();">Excluir</button>{% endif %}
+                </p>
+            </div>
+        </form>
+        <div class="button">
+            <p>
+                <a href="/menu"><button type="button">Voltar</button></a>
+            </p>
+        </div>
+        {% if id_psicologo != 'novo' %}<form action="/psicologo/{{id_psicologo}}" id="delt" method="DELETE" style="display: none"></form>{% endif %}
+    </body>
+</html>

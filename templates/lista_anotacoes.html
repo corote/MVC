@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Anotações</title>
+    </head>
+    <body>
+        <h1>Anotações:</h1>
+        <table border="1">
+            <tr>
+                <!-- <td>ID</td> -->                
+                <td>Data</td>
+                <td>Anotações</td>
+                <td>Código do Prontuário</td>
+                <td>&nbsp;</td>
+            </tr>
+            {% for anotacoes in anotacoes_ %}
+                <tr>
+                    <!-- <td>{{anotacoes['id_anotacoes']}}</td> -->                    
+                    <td>{{anotacoes['data_anotacoes']}}</td>
+                    <td>{{anotacoes['texto_anotacoes']}}</td>
+                    <td>{{anotacoes['id_prontuario']}}</td>
+                    <div class="button">
+                        <td><a href="/anotacoes/{{anotacoes['id_anotacoes']}}"><button type="button">Editar</button></a></td>
+                    </div>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="button">
+            <p>
+                <a href="/menu"><button type="button">Voltar</button></a>
+            </p>
+        </div>
+    </body>
+</html>

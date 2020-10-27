@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Cadastrar Paciente</title>
+        <style>
+            form {
+                /* Apenas para centralizar o form na página */
+                margin: 0 auto;
+                width: 400px;
+                /* Para ver as bordas do formulário */
+                padding: 1em;
+                border: 1px solid #CCC;
+                border-radius: 1em;
+            }
+            form div + div {
+                margin-top: 1em;
+            }
+            label {
+                /*Para ter certeza que todas as labels tem o mesmo tamanho e estão propriamente alinhadas */
+                display: inline-block;
+                width: 90px;
+                text-align: right;
+            }
+            input, textarea {
+                /* Para certificar-se que todos os campos de texto têm as mesmas configurações de fonte. Por padrão, textareas ter uma fonte monospace*/
+                font: 1em sans-serif;
+
+                /* Para dar o mesmo tamanho a todos os campo de texto */
+                width: 300px;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+
+                /* Para harmonizar o look & feel das bordas nos campos de texto*/
+                border: 1px solid #999;
+            }
+            input:focus, textarea:focus {
+                /* Dar um pouco de destaque nos elementos ativos */
+                border-color: #000;
+            }
+            .button {
+                /* Para posicionar os botões para a mesma posição dos campos de texto */
+                padding-left: 90px; /* mesmo tamanho que os elementos do tipo label */
+            }
+            button {
+                /* Esta margem extra representa aproximadamente o mesmo espaço que o espaço entre as labels e os seus campos de texto*/
+                margin-left: .5em;
+            }
+        </style>
+        <script type="text/javascript">
+            const id_paciente = "{{id_paciente}}";
+
+            function validar() {
+                const nome_paciente = document.getElementById('nome_paciente');
+                const nome_social_paciente = document.getElementById('nome_social_paciente');
+                const rg_paciente = document.getElementById('rg_paciente');
+                const cpf_paciente = document.getElementById('cpf_paciente');
+                const data_nascimento_paciente = document.getElementById('data_nascimento_paciente');
+                //const tipo_sanguineo = document.getElementById('tipo_sanguineo');
+                const profissao = document.getElementById('profissao');
+                if (nome_paciente.value === '' || nome_social_paciente === '') {
+                    alert("Preencha o Nome.");
+                    return false;
+                }
+                if (rg_paciente.value === '') {
+                    alert("Preencha o Rg");
+                    return false;
+                }
+                if (cpf_paciente.value === '') {
+                    alert("Preencha o Cpf");
+                    return false;
+                }
+                if (data_nascimento_paciente.value === '') {
+                    alert("Preencha a Data");
+                    return false;
+                }                
+                if (profissao.value === '') {
+                    alert("Preencha a profissao");
+                    return false;
+                }
+                return true;
+            }
+
+            function salvar() {
+                if (!validar()) return;
+                document.getElementById("form_principal").submit();
+            }
+
+            function excluir() {
+                if (!confirm("Você tem certeza?")) return;
+                xhr = new XMLHttpRequest();
+                xhr.open('DELETE', '/paciente/' + id_paciente);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.onload = function() {
+                    if (xhr.readyState !== 4) return;
+                    if (xhr.status === 200) {
+                        document.open();
+                        document.write(xhr.responseText);
+                        document.close();
+                    } else {
+                        alert('Erro ' + xhr.status);
+                    }
+                };
+                xhr.send();
+            }
+        </script>
+    </head>
+    <body>
+        <form action="/paciente/{{id_paciente}}" method="POST" id="form_principal">
+            {% if id_paciente != 'novo'%}
+                <p>
+                    <label>Id:</label>
+                    {{id_paciente}}
+                </p>
+            {% endif %}
+            <p>
+                <label for="nome_paciente">Nome Completo:</label>
+                <input type="text" id="nome_paciente" name="nome_paciente" autocomplete="off" value="{{nome_paciente}}" />
+            </p>
+            <p>
+                <label for="nome_social_paciente">Nome Social:</label>
+                <input type="text" id="nome_social_paciente" name="nome_social_paciente" autocomplete="off" value="{{nome_social_paciente}}" />
+            </p>
+            <p>
+                <label for="rg_paciente">RG:</label>
+                <input type="text" id="rg_paciente" name="rg_paciente" autocomplete="off" value="{{rg_paciente}}" />
+            </p>
+            <p>
+                <label for="cpf_paciente">CPF:</label>
+                <input type="text" id="cpf_paciente" name="cpf_paciente" autocomplete="off" value="{{cpf_paciente}}" />
+            </p>
+            <p>
+                <label for="data_nascimento_paciente">Data do Nascimento:</label>
+                <input type="date" id="data_nascimento_paciente" name="data_nascimento_paciente" autocomplete="off" value="{{data_nascimento_paciente}}" />
+            </p>
+            <p>
+                <label for="profissao">Profissão:</label>
+                <input type="text" id="profissao" name="profissao" autocomplete="off" value="{{profissao}}" />
+            </p>
+            <p>
+                <button type="button" onclick="javascript:salvar();">Salvar</button>
+                {% if id_paciente != 'novo' %}<button type="button" onclick="javascript:excluir();">Excluir</button>{% endif %}
+            </p>
+        </form>
+        <div class="button">
+            <p>
+                <a href="/menu"><button type="button">Voltar</button></a>
+            </p>
+        </div>
+        {% if id_paciente != 'novo' %}<form action="/paciente/{{id_paciente}}" id="delt" method="DELETE" style="display: none"></form>{% endif %}
+    </body>
+</html>

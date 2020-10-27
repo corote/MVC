@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pacientes</title>
+    </head>
+    <body>
+        <h1>Paciente:</h1>
+        <table border="1">
+            <tr>
+                <!-- <td>ID</td> -->
+                <td>Nome Completo</td>
+                <td>Nome Social</td>
+                <td>RG</td>
+                <td>CPF</td>
+                <td>Data de Nascimento</td>                
+                <td>Profissão</td>
+                <td>&nbsp;</td>
+            </tr>
+            {% for paciente in pacientes %}
+                <tr>
+                    <!-- <td>{{paciente['id_paciente']}}</td> -->
+                    <td>{{paciente['nome_paciente']}}</td>
+                    <td>{{paciente['nome_social_paciente']}}</td>
+                    <td>{{paciente['rg_paciente']}}</td>
+                    <td>{{paciente['cpf_paciente']}}</td>
+                    <td>{{paciente['data_nascimento_paciente']}}</td>
+                    <td>{{paciente['profissao']}}</td>
+                    <div class="button">
+                        <td><a href="/paciente/{{paciente['id_paciente']}}"><button type="button">Editar</button></a></td>
+                    </div>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="button">
+            <p>
+                <a href="/menu"><button type="button">Voltar</button></a>
+            </p>
+        </div>
+    </body>
+</html>

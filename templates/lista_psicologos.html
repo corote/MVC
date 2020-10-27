@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Psicólogos</title>
+    </head>
+    <body>
+        <h1>Psicólogo:</h1>
+        <table border="1">
+            <tr>
+                <!-- <td>ID</td> -->
+                <td>Nome Completo</td>
+                <td>Nome Social</td>
+                <td>RG</td>
+                <td>CPF</td>
+                <td>CRP</td>
+                <td>Sexo</td>
+                <td>E-mail</td>
+                <td>Data de Nascimento</td>
+                <td>Data de Vencimento do CRP</td>                
+                <td>Autonomo</td>
+                <td>CNPJ</td>
+                <td>Usuario</td>
+                <!--<td>&nbsp;</td>-->
+            </tr>
+            {% for psicologo in psicologos %}
+                <tr>
+                    <!-- <td>{{psicologo['id_psicologo']}}</td> -->
+                    <td>{{psicologo['nome_psicologo']}}</td>
+                    <td>{{psicologo['nome_social_psicologo']}}</td>
+                    <td>{{psicologo['rg_psicologo']}}</td>
+                    <td>{{psicologo['cpf_psicologo']}}</td>
+                    <td>{{psicologo['crp']}}</td>
+                    <td>{{psicologo['sexo']}}</td>
+                    <td>{{psicologo['email']}}</td>
+                    <td>{{psicologo['data_nascimento_psicologo']}}</td>
+                    <td>{{psicologo['data_validade_crp']}}</td>
+                    <td>{% if psicologo['autonomo'] == 'S' %}Sim{% else %}Não{% endif %}</td>
+                    <td>{{psicologo['cnpj']}}</td>
+                    <td>{{psicologo['usuario']}}</td>
+                    <div class="button">
+                        <td><a href="/psicologo/{{psicologo['id_psicologo']}}"><button type="button">Editar</button></a></td>
+                    </div>
+                </tr>
+            {% endfor %}
+        </table>
+        <div class="button">
+            <p>
+                <a href="/menu"><button type="button">Voltar</button></a>
+            </p>
+        </div>
+    </body>
+</html>
